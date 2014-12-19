@@ -6,6 +6,8 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.x = 0;
+    this.y = 0;
 }
 
 // Update the enemy's position, required method for game
@@ -36,6 +38,7 @@ Player.prototype.handleInput = function() {};
 // Place the player object in a variable called player
 var allEnemies = [];
 var player = new Player();
+allEnemies.push(new Enemy());
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
