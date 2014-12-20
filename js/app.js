@@ -1,30 +1,42 @@
 // Enemies our player must avoid
 var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-    this.velocity = 100;
-    this.x = -101;
-    this.y = 60; // row 1 = 60; row 2 = 145; row 3 = 
+  this.reset();
 }
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     if (this.x < ctx.canvas.width) {
       this.x = this.x + (dt * this.velocity);
+    } else {
+      this.reset();
     }
 }
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+ /*
+  * Resets the enemy to a new random enemy and puts
+  * it back on the left of the screen.
+  */
+Enemy.prototype.reset = function() {
+  var row = getRandomInt(1, 4); 
+  this.sprite = 'images/enemy-bug.png';
+  this.velocity = getRandomInt(50, 180);
+  this.x = getRandomInt(-150, -101); // Stagger randomly
+  this.y = this.getYforRow(row); 
+}
+
+ /*
+  * Returns the y value in pixels for a row on the board
+  * @param row {num} Row number on the board
+  * @return {num} Y value
+  */
+Enemy.prototype.getYforRow = function(row) {
+  return (85 * row) - 25; // row 1 = 60; row 2 = 145; row 3 = 230
 }
 
 // Now write your own player class
@@ -40,9 +52,12 @@ Player.prototype.handleInput = function() {};
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+var numEnemies = 3;
 var allEnemies = [];
 var player = new Player();
-allEnemies.push(new Enemy());
+for (var i = 0; i < numEnemies; i++) {
+  allEnemies.push(new Enemy());
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
