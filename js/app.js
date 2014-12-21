@@ -72,15 +72,38 @@ var Player = function() {
 };
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Character;
-Player.prototype.update = function() {};
+Player.prototype.update = function() {
+  this.x = this.getXforCol(this.col);
+  this.y = this.getYforRow(this.row);
+}
 Player.prototype.handleInput = function(inputKey) {
-  console.log(inputKey);
-};
+  switch(inputKey) {
+    case 'left':
+      if (this.col > 0) {
+        this.col--;
+      }
+      break;
+    case 'right':
+      if (this.col < 4) {
+        this.col++;
+      }
+      break;
+    case 'up':
+      if (this.row > 1) {
+        this.row--;
+      }
+      break;
+    case 'down':
+      if (this.row < 5) {
+        this.row++;
+      }
+      break;
+  }
+}
 Player.prototype.reset = function() {
   this.row = 5;
   this.col = 2;
-  this.x = this.getXforCol(this.col);
-  this.y = this.getYforRow(this.row);
+  this.update();
   this.sprite = 'images/char-boy.png';
 }
 
