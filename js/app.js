@@ -13,7 +13,7 @@ Character.prototype.render = function() {
 * @return {num} Y value
 */
 Character.prototype.getYforRow = function(row) {
-  return (85 * row) - 25; // row 1 = 60; row 2 = 145; row 3 = 230
+  return (83 * row) - 23; // row 1 = 60; row 2 = 145; row 3 = 230
 }
 
 /*
@@ -53,15 +53,6 @@ Enemy.prototype.reset = function() {
   this.velocity = getRandomInt(50, 180);
   this.x = getRandomInt(-150, -101); // Stagger randomly
   this.y = this.getYforRow(row);
-}
-
- /*
-  * Returns the y value in pixels for a row on the board
-  * @param row {num} Row number on the board
-  * @return {num} Y value
-  */
-Enemy.prototype.getYforRow = function(row) {
-  return (85 * row) - 25; // row 1 = 60; row 2 = 145; row 3 = 230
 }
 
 // Now write your own player class
