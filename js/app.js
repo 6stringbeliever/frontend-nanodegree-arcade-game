@@ -1,8 +1,8 @@
 /*
-* Character is the parent object for players and enemies
+* GamePiece is the parent object for players and enemies
 */
-var Character = function() {};
-Character.prototype.render = function() {
+var GamePiece = function() {};
+GamePiece.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
@@ -12,7 +12,7 @@ Character.prototype.render = function() {
 * @param row {num} Row number on the board
 * @return {num} Y value
 */
-Character.prototype.getYforRow = function(row) {
+GamePiece.prototype.getYforRow = function(row) {
   return (83 * row) - 23; // row 1 = 60; row 2 = 145; row 3 = 230
 }
 
@@ -22,17 +22,17 @@ Character.prototype.getYforRow = function(row) {
 * @param col {num} Column number on the board
 * @return {num} X value
 */
-Character.prototype.getXforCol = function(col) {
+GamePiece.prototype.getXforCol = function(col) {
   return 101 * col;
 }
 
 /*
- * Returns true if the character is occupying the same space
- * as the passed in character.
- * @param collider {Character} Character to check against for collision
- * @return {boolean} Whether the character and collider collided
+ * Returns true if the GamePiece is occupying the same space
+ * as the passed in GamePiece.
+ * @param collider {GamePiece} GamePiece to check against for collision
+ * @return {boolean} Whether the GamePiece and collider collided
  */
-Character.prototype.hasCollidedWith = function(collider) {
+GamePiece.prototype.hasCollidedWith = function(collider) {
   var hascollided = false;
   if (collider.y === this.y) {
     if (collider.x + 100 > this.x && collider.x < this.x + 100) {
@@ -46,8 +46,8 @@ Character.prototype.hasCollidedWith = function(collider) {
 var Enemy = function() {
   this.reset();
 }
-Enemy.prototype = Object.create(Character.prototype);
-Enemy.prototype.constructor = Character;
+Enemy.prototype = Object.create(GamePiece.prototype);
+Enemy.prototype.constructor = GamePiece;
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -81,8 +81,8 @@ Enemy.prototype.reset = function() {
 var Player = function() {
   this.reset();
 };
-Player.prototype = Object.create(Character.prototype);
-Player.prototype.constructor = Character;
+Player.prototype = Object.create(GamePiece.prototype);
+Player.prototype.constructor = GamePiece;
 Player.prototype.update = function() {
   this.x = this.getXforCol(this.col);
   this.y = this.getYforRow(this.row);
