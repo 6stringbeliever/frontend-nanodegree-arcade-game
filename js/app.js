@@ -26,6 +26,22 @@ Character.prototype.getXforCol = function(col) {
   return 101 * col;
 }
 
+/*
+ * Returns true if the character is occupying the same space
+ * as the passed in character.
+ * @param collider {Character} Character to check against for collision
+ * @return {boolean} Whether the character and collider collided
+ */
+Character.prototype.hasCollidedWith = function(collider) {
+  var hascollided = false;
+  if (collider.y === this.y) {
+    if (collider.x > this.x && collider.x < this.x + 100) {
+      hascollided = true;
+    }
+  }
+  return hascollided;
+}
+
 // Enemies our player must avoid
 var Enemy = function() {
   this.reset();
@@ -37,7 +53,10 @@ Enemy.prototype.constructor = Character;
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     if (this.x < ctx.canvas.width) {
-      this.x = this.x + (dt * this.velocity);
+      this.x = Math.round(this.x + (dt * this.velocity));
+      if (this.hasCollidedWith(player)) {
+        console.log("Collision!");
+      }
     } else {
       this.reset();
     }
