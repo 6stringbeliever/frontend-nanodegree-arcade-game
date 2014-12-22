@@ -35,7 +35,7 @@ Character.prototype.getXforCol = function(col) {
 Character.prototype.hasCollidedWith = function(collider) {
   var hascollided = false;
   if (collider.y === this.y) {
-    if (collider.x > this.x && collider.x < this.x + 100) {
+    if (collider.x + 100 > this.x && collider.x < this.x + 100) {
       hascollided = true;
     }
   }
@@ -56,6 +56,7 @@ Enemy.prototype.update = function(dt) {
       this.x = Math.round(this.x + (dt * this.velocity));
       if (this.hasCollidedWith(player)) {
         console.log("Collision!");
+        player.reset();
       }
     } else {
       this.reset();
