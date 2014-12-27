@@ -147,6 +147,14 @@ Gem.prototype.reset = function() {
   }
   this.x = this.getXforCol(col);
   this.y = this.getYforRow(row);
+  this.created = Date.now();
+  this.destroytime = (this.duration * 1000) + this.created;
+};
+Gem.prototype.update = function() {
+  var now = Date.now();
+  if (now >= this.destroytime) {
+    this.reset();
+  }
 };
 
 
