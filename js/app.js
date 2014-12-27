@@ -140,7 +140,11 @@ Gem.prototype.reset = function() {
   var row = getRandomInt(1, 4);
   var col = getRandomInt(0, 5);
   var properties = this.gemTypes[getRandomInt(0, this.gemTypes.length)]
-  this.sprite = properties.sprite;
+  for (var propname in properties) {
+    if (properties.hasOwnProperty(propname)) {
+      this[propname] = properties[propname];
+    }
+  }
   this.x = this.getXforCol(col);
   this.y = this.getYforRow(row);
 };
