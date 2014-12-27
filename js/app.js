@@ -118,12 +118,41 @@ Player.prototype.reset = function() {
   this.sprite = 'images/char-boy.png';
 }
 
+
+var Gem = function () {
+  this.reset();
+};
+Gem.prototype = Object.create(GamePiece.prototype);
+Gem.prototype.constructor = GamePiece;
+Gem.prototype.gemTypes = [{ 'color': 'blue',
+                            'sprite': 'images/Gem Blue.png',
+                            'value': 50,
+                            'duration': 20},
+                          { 'color': 'green',
+                            'sprite': 'images/Gem Green.png',
+                            'value': 100,
+                            'duration': 25},
+                          { 'color': 'orange',
+                            'sprite': 'images/Gem Orange.png',
+                            'value': 250,
+                            'duration': 10}];
+Gem.prototype.reset = function() {
+  var row = getRandomInt(1, 4);
+  var col = getRandomInt(0, 5);
+  var properties = this.gemTypes[getRandomInt(0, this.gemTypes.length)]
+  this.sprite = properties.sprite;
+  this.x = this.getXforCol(col);
+  this.y = this.getYforRow(row);
+};
+
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var numEnemies = 3;
 var allEnemies = [];
 var player = new Player();
+var gem = new Gem();
 for (var i = 0; i < numEnemies; i++) {
   allEnemies.push(new Enemy());
 }
