@@ -13,7 +13,7 @@ GamePiece.prototype.render = function() {
 * @return {num} Y value
 */
 GamePiece.prototype.getYforRow = function(row) {
-  return (83 * row) - 23; // row 1 = 60; row 2 = 145; row 3 = 230
+  return (83 * row) - 23;
 }
 
 /*
@@ -42,15 +42,20 @@ GamePiece.prototype.hasCollidedWith = function(collider) {
   return hascollided;
 }
 
-// Enemies our player must avoid
+
+ /*
+  * Enemy objects. Enemies aren't actually destroyed when they reach the
+  * end of the screen, just randomly reset.
+  */
 var Enemy = function() {
   this.reset();
 }
 Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = GamePiece;
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+ /* Update the enemy's position, required method for game.
+  * @param dt {num} a time delta between ticks
+  */
 Enemy.prototype.update = function(dt) {
     if (this.x < ctx.canvas.width) {
       this.x = Math.round(this.x + (dt * this.velocity));
@@ -75,18 +80,28 @@ Enemy.prototype.reset = function() {
   this.y = this.getYforRow(row);
 }
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+
+ /*
+  * Player class.
+  */
 var Player = function() {
   this.reset();
 };
 Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = GamePiece;
+
+ /*
+  * If the player has been moved, update its x and y coordinates
+  * based on its new row or column position.
+  */
 Player.prototype.update = function() {
   this.x = this.getXforCol(this.col);
   this.y = this.getYforRow(this.row);
 }
+ /*
+  * Move the player one row or column based on input key. Don't move
+  * player off board.
+  */
 Player.prototype.handleInput = function(inputKey) {
   switch(inputKey) {
     case 'left':
@@ -111,6 +126,10 @@ Player.prototype.handleInput = function(inputKey) {
       break;
   }
 }
+
+ /*
+  * Resets the player to the bottom center of the screen.
+  */
 Player.prototype.reset = function() {
   this.row = 5;
   this.col = 2;
@@ -119,11 +138,20 @@ Player.prototype.reset = function() {
 }
 
 
+ /*
+  * Gem objects the player can collect for points. Gem objects
+  * disappear after a certain time and appear in random spots on the
+  * board.
+  */
 var Gem = function () {
   this.reset();
 };
 Gem.prototype = Object.create(GamePiece.prototype);
 Gem.prototype.constructor = GamePiece;
+
+  /*
+   * Gem properties by type. Duration is milliseconds gem appears on screen.
+   */
 Gem.prototype.gemTypes = [{ 'color': 'blue',
                             'sprite': 'images/Gem Blue.png',
                             'value': 50,
@@ -136,6 +164,11 @@ Gem.prototype.gemTypes = [{ 'color': 'blue',
                             'sprite': 'images/Gem Orange.png',
                             'value': 250,
                             'duration': 5000}];
+
+ /*
+  * Resets the gem to a random spot on the screen and sets properties
+  * after choosing a random gem type.
+  */
 Gem.prototype.reset = function() {
   var row = getRandomInt(1, 4);
   var col = getRandomInt(0, 5);
@@ -150,6 +183,10 @@ Gem.prototype.reset = function() {
   this.created = Date.now();
   this.destroytime = this.duration + this.created;
 };
+
+ /*
+  * Replaces gem with a placeholder if time for it to be destroyed.
+  */
 Gem.prototype.update = function() {
   var now = Date.now();
   if (now >= this.destroytime) {
@@ -172,6 +209,10 @@ var Placeholder = function(replaceCallback) {
   this.replaceCallback = replaceCallback;
   this.replacetime = Date.now() + getRandomInt(0, 10000);
 };
+
+ /*
+  * Runs the callback to replace the item.
+  */
 Placeholder.prototype.update = function() {
   if (Date.now() >= this.replacetime) {
     this.replaceCallback();
