@@ -127,15 +127,15 @@ Gem.prototype.constructor = GamePiece;
 Gem.prototype.gemTypes = [{ 'color': 'blue',
                             'sprite': 'images/Gem Blue.png',
                             'value': 50,
-                            'duration': 20},
+                            'duration': 15},
                           { 'color': 'green',
                             'sprite': 'images/Gem Green.png',
                             'value': 100,
-                            'duration': 25},
+                            'duration': 10},
                           { 'color': 'orange',
                             'sprite': 'images/Gem Orange.png',
                             'value': 250,
-                            'duration': 10}];
+                            'duration': 5}];
 Gem.prototype.reset = function() {
   var row = getRandomInt(1, 4);
   var col = getRandomInt(0, 5);
@@ -153,7 +153,17 @@ Gem.prototype.reset = function() {
 Gem.prototype.update = function() {
   var now = Date.now();
   if (now >= this.destroytime) {
-    this.reset();
+    gem = new Placeholder(new Gem());
+  }
+};
+
+var Placeholder = function(placeholderFor) {
+  this.placeholderFor = placeholderFor;
+  this.replacetime = Date.now() + getRandomInt(0, 10000);
+};
+Placeholder.prototype.update = function() {
+  if (Date.now() >= this.replacetime) {
+    gem = this.placeholderFor;
   }
 };
 
