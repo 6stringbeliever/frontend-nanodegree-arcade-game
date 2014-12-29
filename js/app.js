@@ -1,5 +1,5 @@
 /*
-* GamePiece is the parent object for players and enemies
+* GamePiece is the parent object for players, enemies, and items.
 */
 var GamePiece = function() {};
 GamePiece.prototype.render = function() {
@@ -33,13 +33,13 @@ GamePiece.prototype.getXforCol = function(col) {
  * @return {boolean} Whether the GamePiece and collider collided
  */
 GamePiece.prototype.hasCollidedWith = function(collider) {
-  var hascollided = false;
+  var hasCollided = false;
   if (collider.y === this.y) {
     if (collider.x + 100 > this.x && collider.x < this.x + 100) {
-      hascollided = true;
+      hasCollided = true;
     }
   }
-  return hascollided;
+  return hasCollided;
 }
 
 
@@ -95,9 +95,12 @@ Player.prototype.constructor = GamePiece;
   * based on its new row or column position.
   */
 Player.prototype.update = function() {
-  this.x = this.getXforCol(this.col);
-  this.y = this.getYforRow(this.row);
+  this.setXYValues();
+  if (this.hasCollidedWith(gem)) {
+    gem.destroySelf();
+  }
 }
+
  /*
   * Move the player one row or column based on input key. Don't move
   * player off board.
@@ -133,8 +136,16 @@ Player.prototype.handleInput = function(inputKey) {
 Player.prototype.reset = function() {
   this.row = 5;
   this.col = 2;
-  this.update();
+  this.setXYValues();
   this.sprite = 'images/char-boy.png';
+}
+
+ /*
+  * Sets the x and y value for player based on row and column.
+  */
+Player.prototype.setXYValues = function() {
+  this.x = this.getXforCol(this.col);
+  this.y = this.getYforRow(this.row);
 }
 
 
@@ -188,11 +199,19 @@ Gem.prototype.reset = function() {
   */
 Gem.prototype.update = function() {
   if (Date.now() >= this.destroytime) {
-    gem = new Placeholder(function () {
-                              gem = new Gem();
-                          });
+    this.destroySelf();
   }
 };
+
+ /*
+  * Replace self with a placeholder for a new gem.
+  */
+Gem.prototype.destroySelf = function() {
+  gem = new Placeholder(function () {
+    gem = new Gem();
+  });
+}
+
 
  /*
   * Placeholder object holds the place for any item object
