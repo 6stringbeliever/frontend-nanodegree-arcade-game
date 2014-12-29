@@ -59,9 +59,9 @@ Enemy.prototype.constructor = GamePiece;
 Enemy.prototype.update = function(dt) {
     if (this.x < ctx.canvas.width) {
       this.x = Math.round(this.x + (dt * this.velocity));
-      if (this.hasCollidedWith(player)) {
+      if (this.hasCollidedWith(game.player)) {
         console.log("Collision!");
-        player.reset();
+        game.player.reset();
       }
     } else {
       this.reset();
@@ -96,8 +96,8 @@ Player.prototype.constructor = GamePiece;
   */
 Player.prototype.update = function() {
   this.setXYValues();
-  if (this.hasCollidedWith(gem)) {
-    gem.destroySelf();
+  if (this.hasCollidedWith(game.gem)) {
+    game.gem.destroySelf();
   }
 }
 
@@ -207,8 +207,8 @@ Gem.prototype.update = function() {
   * Replace self with a placeholder for a new gem.
   */
 Gem.prototype.destroySelf = function() {
-  gem = new Placeholder(function () {
-    gem = new Gem();
+  game.gem = new Placeholder(function () {
+    game.gem = new Gem();
   });
 }
 
@@ -237,16 +237,22 @@ Placeholder.prototype.update = function() {
 };
 
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-var numEnemies = 3;
-var allEnemies = [];
-var player = new Player();
-var gem = new Gem();
-for (var i = 0; i < numEnemies; i++) {
-  allEnemies.push(new Enemy());
+ /*
+  * GameState object keeps track of global game properties.
+  */
+var GameState = function() {
+  this.numEnemies = 3;
+  this.allEnemies = [];
+  this.player = new Player();
+  this.gem = new Gem();
+  for (var i = 0; i < this.numEnemies; i++) {
+    this.allEnemies.push(new Enemy());
+  }
 }
+
+
+// Instantiate game state.
+var game = new GameState();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -258,5 +264,5 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    game.player.handleInput(allowedKeys[e.keyCode]);
 });
