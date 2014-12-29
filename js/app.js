@@ -180,16 +180,14 @@ Gem.prototype.reset = function() {
   }
   this.x = this.getXforCol(col);
   this.y = this.getYforRow(row);
-  this.created = Date.now();
-  this.destroytime = this.duration + this.created;
+  this.destroytime = this.duration + Date.now();
 };
 
  /*
   * Replaces gem with a placeholder if time for it to be destroyed.
   */
 Gem.prototype.update = function() {
-  var now = Date.now();
-  if (now >= this.destroytime) {
+  if (Date.now() >= this.destroytime) {
     gem = new Placeholder(function () {
                               gem = new Gem();
                           });
