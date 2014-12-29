@@ -127,15 +127,15 @@ Gem.prototype.constructor = GamePiece;
 Gem.prototype.gemTypes = [{ 'color': 'blue',
                             'sprite': 'images/Gem Blue.png',
                             'value': 50,
-                            'duration': 15},
+                            'duration': 15000},
                           { 'color': 'green',
                             'sprite': 'images/Gem Green.png',
                             'value': 100,
-                            'duration': 10},
+                            'duration': 10000},
                           { 'color': 'orange',
                             'sprite': 'images/Gem Orange.png',
                             'value': 250,
-                            'duration': 5}];
+                            'duration': 5000}];
 Gem.prototype.reset = function() {
   var row = getRandomInt(1, 4);
   var col = getRandomInt(0, 5);
@@ -148,22 +148,33 @@ Gem.prototype.reset = function() {
   this.x = this.getXforCol(col);
   this.y = this.getYforRow(row);
   this.created = Date.now();
-  this.destroytime = (this.duration * 1000) + this.created;
+  this.destroytime = this.duration + this.created;
 };
 Gem.prototype.update = function() {
   var now = Date.now();
   if (now >= this.destroytime) {
-    gem = new Placeholder(new Gem());
+    gem = new Placeholder(function () {
+                              gem = new Gem();
+                          });
   }
 };
 
-var Placeholder = function(placeholderFor) {
-  this.placeholderFor = placeholderFor;
+ /*
+  * Placeholder object holds the place for any item object
+  * such as a gem for a random time period then replaces it using
+  * the callback function passed in at instantiation. We use a callback
+  * function rather than an object because item objects need to set
+  * destroy times at instantiation.
+  * @param replaceCallback {function} Function used to replace an item called
+  * at replacetime
+  */
+var Placeholder = function(replaceCallback) {
+  this.replaceCallback = replaceCallback;
   this.replacetime = Date.now() + getRandomInt(0, 10000);
 };
 Placeholder.prototype.update = function() {
   if (Date.now() >= this.replacetime) {
-    gem = this.placeholderFor;
+    this.replaceCallback();
   }
 };
 
