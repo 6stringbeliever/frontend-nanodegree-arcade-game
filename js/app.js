@@ -296,14 +296,31 @@ Toast.prototype.render = function() {
 
 
  /*
+  * Scoreboard object displays the score at the top of the screen.
+  */
+var Scoreboard = function() {
+
+}
+
+ /*
+  * Renders the scoreboard.
+  */
+Scoreboard.prototype.render = function() {
+
+}
+
+
+ /*
   * GameState object keeps track of global game properties.
   */
 var GameState = function() {
   this.numEnemies = 3;
+  this.gameStarted = Date.now();
   this.allEnemies = [];
   this.player = new Player();
   this.gem = new Gem();
   this.toasts = [];
+  this.scoreboard = new Scoreboard();
   for (var i = 0; i < this.numEnemies; i++) {
     this.allEnemies.push(new Enemy());
   }

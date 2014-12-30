@@ -166,6 +166,8 @@ var Engine = (function(global) {
         game.toasts.forEach(function(toast) {
           toast.render();
         });
+
+        game.scoreboard.render();
     }
 
     /* This function does nothing but it could have been a good place to
