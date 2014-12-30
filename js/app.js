@@ -98,7 +98,7 @@ Player.prototype.constructor = GamePiece;
 Player.prototype.update = function() {
   this.setXYValues();
   if (this.hasCollidedWith(game.gem)) {
-    game.toasts.push(new Toast("Huzzah!"));
+    game.toasts.push(new Toast("+" + game.gem.value, this.x + 51, this.y + 63));
     game.gem.destroySelf();
   }
 }
