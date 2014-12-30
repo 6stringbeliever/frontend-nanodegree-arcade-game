@@ -3,6 +3,7 @@
 */
 var GamePiece = function() {};
 GamePiece.prototype.render = function() {
+  ctx.globalAlpha = 1.0;
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
@@ -240,7 +241,9 @@ Placeholder.prototype.update = function() {
 
  /*
   * Toasts are text that display briefly on the screen.
-  * @param text {String} Text to display
+  * @param displayText {String} Text to display
+  * @param opt_x {num} Optional x position, displays center by default
+  * @param opt_Y {num} Optional y position, displays at 100px by default
   */
 var Toast = function(displayText, opt_x, opt_y) {
   this.displayText = displayText;
@@ -263,6 +266,11 @@ Toast.prototype.update = function() {
   */
 Toast.prototype.render = function() {
   ctx.font = "bold 12pt Helvetica, Arial, sans-serif";
+  if (this.destroytime - Date.now() > 1000) {
+    ctx.globalAlpha = 1.0;
+  } else {
+    ctx.globalAlpha = (this.destroytime - Date.now()) / 1000;
+  }
   ctx.textAlign = "center";
   ctx.strokeStyle = "black";
   ctx.lineWidth = 2;
