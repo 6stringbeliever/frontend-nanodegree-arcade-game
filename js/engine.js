@@ -96,6 +96,7 @@ var Engine = (function(global) {
         });
         game.player.update();
         game.gem.update();
+        game.scoreboard.update();
         game.toasts.forEach(function(toast) {
             toast.update();
         });

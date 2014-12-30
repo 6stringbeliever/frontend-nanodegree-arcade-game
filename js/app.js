@@ -165,6 +165,21 @@ Player.prototype.kill = function() {
   this.resetPos();
 }
 
+ /*
+  * Returns the number of lives remaining.
+  * @return {num} Lives remaining
+  */
+ Player.prototype.getLives = function() {
+   return this.lives;
+ }
+
+  /*
+   * Returns the player's score.
+   * @return {num} Player's score
+   */
+ Player.prototype.getScore = function() {
+   return this.score;
+ }
 
  /*
   * Gem objects the player can collect for points. Gem objects
@@ -298,15 +313,42 @@ Toast.prototype.render = function() {
  /*
   * Scoreboard object displays the score at the top of the screen.
   */
-var Scoreboard = function() {
+var Scoreboard = function(gameState) {
+  this.gameState = gameState;
+  this.score = {};
+  this.freeze = false;
+}
 
+ /*
+  * Updates the values for the scoreboard.
+  */
+Scoreboard.prototype.update = function() {
+  if (!this.freeze) {
+    this.score = this.gameState.getScoreboardValues();
+  }
+  if (this.score.livesRemaining === 0) {
+    this.freeze = true;
+  }
 }
 
  /*
   * Renders the scoreboard.
   */
 Scoreboard.prototype.render = function() {
-
+  var output = "Score: " + this.score.score;
+  output += "   Lives: " + this.score.livesRemaining;
+  output += "   Time: " + this.score.elapsedTime;
+  //console.log(output);
+  ctx.globalAlpha = 1.0;
+  ctx.font = "bold 18pt Helvetica, Arial, sans-serif";
+  ctx.textAlign = "left";
+  ctx.strokeStyle = "black";
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, ctx.canvas.width, 50);
+  ctx.lineWidth = 3;
+  ctx.strokeText(output, 5, 40);
+  ctx.fillStyle = "#9cf";
+  ctx.fillText(output, 5, 40);
 }
 
 
@@ -320,10 +362,22 @@ var GameState = function() {
   this.player = new Player();
   this.gem = new Gem();
   this.toasts = [];
-  this.scoreboard = new Scoreboard();
+  this.scoreboard = new Scoreboard(this);
   for (var i = 0; i < this.numEnemies; i++) {
     this.allEnemies.push(new Enemy());
   }
+}
+
+ /*
+  * Returns an object contain data for the scoreboard.
+  * @return {Object} Scoreboard values object
+  */
+GameState.prototype.getScoreboardValues = function() {
+  return {
+    "elapsedTime": Math.round((Date.now() - this.gameStarted) / 1000),
+    "livesRemaining": this.player.getLives(),
+    "score": this.player.getScore()
+  };
 }
 
 
