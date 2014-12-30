@@ -86,7 +86,10 @@ Enemy.prototype.reset = function() {
   * Player class.
   */
 var Player = function() {
-  this.reset();
+  this.sprite = 'images/char-boy.png';
+  this.score = 0;
+  this.lives = 5;
+  this.resetPos();
 };
 Player.prototype = Object.create(GamePiece.prototype);
 Player.prototype.constructor = GamePiece;
@@ -99,49 +102,50 @@ Player.prototype.update = function() {
   this.setXYValues();
   if (this.hasCollidedWith(game.gem)) {
     game.toasts.push(new Toast("+" + game.gem.value, this.x + 51, this.y + 63));
-    game.score += game.gem.value;
-    console.log("Score: " + game.score);
+    this.score += game.gem.value;
+    console.log("Score: " + this.score);
     game.gem.destroySelf();
   }
 }
 
  /*
   * Move the player one row or column based on input key. Don't move
-  * player off board.
+  * player off board. Don't move if no lives left.
   */
 Player.prototype.handleInput = function(inputKey) {
-  switch(inputKey) {
-    case 'left':
-      if (this.col > 0) {
-        this.col--;
-      }
-      break;
-    case 'right':
-      if (this.col < 4) {
-        this.col++;
-      }
-      break;
-    case 'up':
-      if (this.row > 1) {
-        this.row--;
-      }
-      break;
-    case 'down':
-      if (this.row < 5) {
-        this.row++;
-      }
-      break;
+  if (this.lives > 0) {
+    switch(inputKey) {
+      case 'left':
+        if (this.col > 0) {
+          this.col--;
+        }
+        break;
+      case 'right':
+        if (this.col < 4) {
+          this.col++;
+        }
+        break;
+      case 'up':
+        if (this.row > 1) {
+          this.row--;
+        }
+        break;
+      case 'down':
+        if (this.row < 5) {
+          this.row++;
+        }
+        break;
+    }
   }
 }
 
  /*
   * Resets the player to the bottom center of the screen.
   */
-Player.prototype.reset = function() {
+Player.prototype.resetPos = function() {
   this.row = 5;
   this.col = 2;
   this.setXYValues();
-  this.sprite = 'images/char-boy.png';
 }
 
  /*
@@ -156,9 +160,9 @@ Player.prototype.setXYValues = function() {
   * Kills the player. Subtract a life and reset.
   */
 Player.prototype.kill = function() {
-  game.lives--;
-  console.log("Lives remaining: " + game.lives);
-  this.reset();
+  this.lives--;
+  console.log("Lives remaining: " + this.lives);
+  this.resetPos();
 }
 
 
@@ -264,7 +268,7 @@ var Toast = function(displayText, opt_x, opt_y) {
 }
 
  /*
-  * Updates toast position and removes after time limit.
+  * Removes after time limit.
   */
 Toast.prototype.update = function() {
   if (Date.now() >= this.destroytime) {
@@ -284,7 +288,7 @@ Toast.prototype.render = function() {
   }
   ctx.textAlign = "center";
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 3;
   ctx.strokeText(this.displayText, this.x, this.y);
   ctx.fillStyle = "white";
   ctx.fillText(this.displayText, this.x, this.y);
@@ -300,8 +304,6 @@ var GameState = function() {
   this.player = new Player();
   this.gem = new Gem();
   this.toasts = [];
-  this.score = 0;
-  this.lives = 5;
   for (var i = 0; i < this.numEnemies; i++) {
     this.allEnemies.push(new Enemy());
   }
