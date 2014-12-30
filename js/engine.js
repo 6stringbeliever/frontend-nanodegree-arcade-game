@@ -96,6 +96,9 @@ var Engine = (function(global) {
         });
         game.player.update();
         game.gem.update();
+        game.toasts.forEach(function(toast) {
+            toast.update();
+        });
     }
 
     /* This function initially draws the "game level", it will then call
@@ -158,6 +161,10 @@ var Engine = (function(global) {
         if (game.gem instanceof Gem) {
           game.gem.render();
         }
+
+        game.toasts.forEach(function(toast) {
+          toast.render();
+        });
     }
 
     /* This function does nothing but it could have been a good place to

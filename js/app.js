@@ -97,6 +97,7 @@ Player.prototype.constructor = GamePiece;
 Player.prototype.update = function() {
   this.setXYValues();
   if (this.hasCollidedWith(game.gem)) {
+    game.toasts.push(new Toast("Huzzah!"));
     game.gem.destroySelf();
   }
 }
@@ -238,6 +239,40 @@ Placeholder.prototype.update = function() {
 
 
  /*
+  * Toasts are text that display briefly on the screen.
+  * @param text {String} Text to display
+  */
+var Toast = function(displayText, opt_x, opt_y) {
+  this.displayText = displayText;
+  this.destroytime = Date.now() + 2000;
+  this.x = opt_x || ctx.canvas.width/2;
+  this.y = opt_y || 100;
+}
+
+ /*
+  * Updates toast position and removes after time limit.
+  */
+Toast.prototype.update = function() {
+  if (Date.now() >= this.destroytime) {
+    game.toasts.splice(game.toasts.indexOf(this), 1);
+  }
+}
+
+ /*
+  * Renders the toast on screen.
+  */
+Toast.prototype.render = function() {
+  ctx.font = "bold 12pt Helvetica, Arial, sans-serif";
+  ctx.textAlign = "center";
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 2;
+  ctx.strokeText(this.displayText, this.x, this.y);
+  ctx.fillStyle = "white";
+  ctx.fillText(this.displayText, this.x, this.y);
+}
+
+
+ /*
   * GameState object keeps track of global game properties.
   */
 var GameState = function() {
@@ -245,6 +280,7 @@ var GameState = function() {
   this.allEnemies = [];
   this.player = new Player();
   this.gem = new Gem();
+  this.toasts = [];
   for (var i = 0; i < this.numEnemies; i++) {
     this.allEnemies.push(new Enemy());
   }
