@@ -62,7 +62,7 @@ Enemy.prototype.update = function(dt) {
       this.x = Math.round(this.x + (dt * this.velocity));
       if (this.hasCollidedWith(game.player)) {
         console.log("Collision!");
-        game.player.reset();
+        game.player.kill();
       }
     } else {
       this.reset();
@@ -99,6 +99,8 @@ Player.prototype.update = function() {
   this.setXYValues();
   if (this.hasCollidedWith(game.gem)) {
     game.toasts.push(new Toast("+" + game.gem.value, this.x + 51, this.y + 63));
+    game.score += game.gem.value;
+    console.log("Score: " + game.score);
     game.gem.destroySelf();
   }
 }
@@ -148,6 +150,15 @@ Player.prototype.reset = function() {
 Player.prototype.setXYValues = function() {
   this.x = this.getXforCol(this.col);
   this.y = this.getYforRow(this.row);
+}
+
+ /*
+  * Kills the player. Subtract a life and reset.
+  */
+Player.prototype.kill = function() {
+  game.lives--;
+  console.log("Lives remaining: " + game.lives);
+  this.reset();
 }
 
 
@@ -289,6 +300,8 @@ var GameState = function() {
   this.player = new Player();
   this.gem = new Gem();
   this.toasts = [];
+  this.score = 0;
+  this.lives = 5;
   for (var i = 0; i < this.numEnemies; i++) {
     this.allEnemies.push(new Enemy());
   }
