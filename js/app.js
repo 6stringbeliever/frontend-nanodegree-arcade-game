@@ -61,7 +61,6 @@ Enemy.prototype.update = function(dt) {
     if (this.x < ctx.canvas.width) {
       this.x = Math.round(this.x + (dt * this.velocity));
       if (this.hasCollidedWith(game.player)) {
-        console.log("Collision!");
         game.player.kill();
       }
     } else {
@@ -103,7 +102,6 @@ Player.prototype.update = function() {
   if (this.hasCollidedWith(game.gem)) {
     game.toasts.push(new Toast("+" + game.gem.value, this.x + 51, this.y + 63));
     this.score += game.gem.value;
-    console.log("Score: " + this.score);
     game.gem.destroySelf();
   }
 }
@@ -161,7 +159,7 @@ Player.prototype.setXYValues = function() {
   */
 Player.prototype.kill = function() {
   this.lives--;
-  console.log("Lives remaining: " + this.lives);
+  game.toasts.push(new Toast("Ouch!", this.x + 51, this.y + 118));
   this.resetPos();
 }
 
