@@ -134,6 +134,8 @@ Player.prototype.handleInput = function(inputKey) {
         }
         break;
     }
+  } else {
+    game.reset();
   }
 }
 
@@ -161,7 +163,10 @@ Player.prototype.kill = function() {
   this.lives--;
   game.toasts.push(new Toast("Ouch!", this.x + 51, this.y + 118));
   if (this.lives === 0) {
-    game.toasts.push(new Toast("GAME OVER", ctx.canvas.width/2, 300, "large", -1));
+    game.toasts.push(new Toast("GAME OVER", ctx.canvas.width/2, 300,
+                               "large", -1));
+    game.toasts.push(new Toast("Press any key", ctx.canvas.width/2, 350,
+                               "medium", -1));
   }
   this.resetPos();
 }
@@ -381,6 +386,13 @@ Scoreboard.prototype.render = function() {
   * GameState object keeps track of global game properties.
   */
 var GameState = function() {
+  this.reset();
+}
+
+ /*
+  * Sets the game state to the initial state.
+  */
+GameState.prototype.reset = function() {
   this.numEnemies = 3;
   this.gameStarted = Date.now();
   this.allEnemies = [];
@@ -392,7 +404,6 @@ var GameState = function() {
     this.allEnemies.push(new Enemy());
   }
 }
-
  /*
   * Returns an object contain data for the scoreboard.
   * @return {Object} Scoreboard values object
