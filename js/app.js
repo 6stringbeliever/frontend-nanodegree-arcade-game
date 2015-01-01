@@ -160,6 +160,9 @@ Player.prototype.setXYValues = function() {
 Player.prototype.kill = function() {
   this.lives--;
   game.toasts.push(new Toast("Ouch!", this.x + 51, this.y + 118));
+  if (this.lives === 0) {
+    game.toasts.push(new Toast("GAME OVER", ctx.canvas.width/2, 300, "large", -1));
+  }
   this.resetPos();
 }
 
@@ -272,19 +275,35 @@ Placeholder.prototype.update = function() {
   * @param displayText {String} Text to display
   * @param opt_x {num} Optional x position, displays center by default
   * @param opt_Y {num} Optional y position, displays at 100px by default
+  * @param opt_size {String} A value of small, medium, or large
+  * @param opt_duration {num} Length of time in milliseconds for the toast to
+  * display; pass -1 to display until the game is reset
   */
-var Toast = function(displayText, opt_x, opt_y) {
+var Toast = function(displayText, opt_x, opt_y, opt_size, opt_duration) {
+  var duration;
   this.displayText = displayText;
-  this.destroytime = Date.now() + 2000;
+  /* Default destroy time is 200; if a duration of -1 or less is passed in
+   * set destroy time to zero and don't destroy until game is reset. */
+  duration = opt_duration || 2000;
+  if (duration > 0) {
+    this.destroytime = Date.now() + duration;
+  } else {
+    this.destroytime = 0;
+  }
   this.x = opt_x || ctx.canvas.width/2;
   this.y = opt_y || 100;
+  if (this.fontSizes.hasOwnProperty(opt_size)) {
+    this.size = this.fontSizes[opt_size];
+  } else {
+    this.size = this.fontSizes.small;
+  }
 }
 
  /*
   * Removes after time limit.
   */
 Toast.prototype.update = function() {
-  if (Date.now() >= this.destroytime) {
+  if (this.destroytime !== 0 && Date.now() >= this.destroytime) {
     game.toasts.splice(game.toasts.indexOf(this), 1);
   }
 }
@@ -293,8 +312,8 @@ Toast.prototype.update = function() {
   * Renders the toast on screen.
   */
 Toast.prototype.render = function() {
-  ctx.font = "bold 12pt Helvetica, Arial, sans-serif";
-  if (this.destroytime - Date.now() > 1000) {
+  ctx.font = this.size;
+  if (this.destroytime === 0 || this.destroytime - Date.now() > 1000) {
     ctx.globalAlpha = 1.0;
   } else {
     ctx.globalAlpha = (this.destroytime - Date.now()) / 1000;
@@ -307,6 +326,14 @@ Toast.prototype.render = function() {
   ctx.fillText(this.displayText, this.x, this.y);
 }
 
+ /*
+  * Toast font sizes.
+  */
+Toast.prototype.fontSizes = {
+  "small": "bold 12pt Helvetica, Arial, sans-serif",
+  "medium": "bold 24pt Helvetica, Arial, sans-serif",
+  "large": "bold 48pt Helvetica, Arial, sans-serif"
+}
 
  /*
   * Scoreboard object displays the score at the top of the screen.
