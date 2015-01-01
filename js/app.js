@@ -1,38 +1,38 @@
-/*
-* GamePiece is the parent object for players, enemies, and items.
-*/
+ /*
+  * GamePiece is the parent object for players, enemies, and items.
+ */
 var GamePiece = function() {};
 GamePiece.prototype.render = function() {
   ctx.globalAlpha = 1.0;
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-/*
-* Returns the y value in pixels for a row on the board. Rows are
-* zero-indexed.
-* @param row {num} Row number on the board
-* @return {num} Y value
-*/
+ /*
+  * Returns the y value in pixels for a row on the board. Rows are
+  * zero-indexed.
+  * @param row {num} Row number on the board
+  * @return {num} Y value
+  */
 GamePiece.prototype.getYforRow = function(row) {
   return (83 * row) - 23;
 }
 
-/*
-* Returns the x value in pixels for a column on the board.
-* Columns are zero-indexed.
-* @param col {num} Column number on the board
-* @return {num} X value
-*/
+ /*
+  * Returns the x value in pixels for a column on the board.
+  * Columns are zero-indexed.
+  * @param col {num} Column number on the board
+  * @return {num} X value
+  */
 GamePiece.prototype.getXforCol = function(col) {
   return 101 * col;
 }
 
-/*
- * Returns true if the GamePiece is occupying the same space
- * as the passed in GamePiece.
- * @param collider {GamePiece} GamePiece to check against for collision
- * @return {boolean} Whether the GamePiece and collider collided
- */
+ /*
+  * Returns true if the GamePiece is occupying the same space
+  * as the passed in GamePiece.
+  * @param collider {GamePiece} GamePiece to check against for collision
+  * @return {boolean} Whether the GamePiece and collider collided
+  */
 GamePiece.prototype.hasCollidedWith = function(collider) {
   var hasCollided = false;
   if (collider.y === this.y) {
@@ -167,17 +167,17 @@ Player.prototype.kill = function() {
   * Returns the number of lives remaining.
   * @return {num} Lives remaining
   */
- Player.prototype.getLives = function() {
-   return this.lives;
- }
+Player.prototype.getLives = function() {
+  return this.lives;
+}
 
-  /*
-   * Returns the player's score.
-   * @return {num} Player's score
-   */
- Player.prototype.getScore = function() {
-   return this.score;
- }
+ /*
+  * Returns the player's score.
+  * @return {num} Player's score
+  */
+Player.prototype.getScore = function() {
+  return this.score;
+}
 
  /*
   * Gem objects the player can collect for points. Gem objects
@@ -190,9 +190,9 @@ var Gem = function () {
 Gem.prototype = Object.create(GamePiece.prototype);
 Gem.prototype.constructor = GamePiece;
 
-  /*
-   * Gem properties by type. Duration is milliseconds gem appears on screen.
-   */
+ /*
+  * Gem properties by type. Duration is milliseconds gem appears on screen.
+  */
 Gem.prototype.gemTypes = [{ 'color': 'blue',
                             'sprite': 'images/Gem Blue.png',
                             'value': 50,
