@@ -5,7 +5,7 @@ var GamePiece = function() {};
 GamePiece.prototype.render = function() {
   ctx.globalAlpha = 1.0;
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
  /*
   * Returns the y value in pixels for a row on the board. Rows are
@@ -15,7 +15,7 @@ GamePiece.prototype.render = function() {
   */
 GamePiece.prototype.getYforRow = function(row) {
   return (83 * row) - 23;
-}
+};
 
  /*
   * Returns the x value in pixels for a column on the board.
@@ -25,7 +25,7 @@ GamePiece.prototype.getYforRow = function(row) {
   */
 GamePiece.prototype.getXforCol = function(col) {
   return 101 * col;
-}
+};
 
  /*
   * Returns true if the GamePiece is occupying the same space
@@ -41,7 +41,7 @@ GamePiece.prototype.hasCollidedWith = function(collider) {
     }
   }
   return hasCollided;
-}
+};
 
 
  /*
@@ -50,7 +50,7 @@ GamePiece.prototype.hasCollidedWith = function(collider) {
   */
 var Enemy = function() {
   this.reset();
-}
+};
 Enemy.prototype = Object.create(GamePiece.prototype);
 Enemy.prototype.constructor = Enemy;
 
@@ -66,7 +66,7 @@ Enemy.prototype.update = function(dt) {
     } else {
       this.reset();
     }
-}
+};
 
  /*
   * Resets the enemy to a new random enemy and puts
@@ -78,7 +78,7 @@ Enemy.prototype.reset = function() {
   this.velocity = getRandomInt(50, 180);
   this.x = getRandomInt(-150, -101); // Stagger randomly
   this.y = this.getYforRow(row);
-}
+};
 
 
  /*
@@ -104,7 +104,7 @@ Player.prototype.update = function() {
     this.score += game.gem.value;
     game.gem.destroySelf();
   }
-}
+};
 
  /*
   * Move the player one row or column based on input key. Don't move
@@ -137,7 +137,7 @@ Player.prototype.handleInput = function(inputKey) {
   } else {
     game.reset();
   }
-}
+};
 
  /*
   * Resets the player to the bottom center of the screen.
@@ -146,7 +146,7 @@ Player.prototype.resetPos = function() {
   this.row = 5;
   this.col = 2;
   this.setXYValues();
-}
+};
 
  /*
   * Sets the x and y value for player based on row and column.
@@ -154,7 +154,7 @@ Player.prototype.resetPos = function() {
 Player.prototype.setXYValues = function() {
   this.x = this.getXforCol(this.col);
   this.y = this.getYforRow(this.row);
-}
+};
 
  /*
   * Kills the player. Subtract a life and reset.
@@ -169,7 +169,7 @@ Player.prototype.kill = function() {
                                "medium", -1));
   }
   this.resetPos();
-}
+};
 
  /*
   * Returns the number of lives remaining.
@@ -177,7 +177,7 @@ Player.prototype.kill = function() {
   */
 Player.prototype.getLives = function() {
   return this.lives;
-}
+};
 
  /*
   * Returns the player's score.
@@ -185,7 +185,7 @@ Player.prototype.getLives = function() {
   */
 Player.prototype.getScore = function() {
   return this.score;
-}
+};
 
  /*
   * Gem objects the player can collect for points. Gem objects
@@ -221,7 +221,7 @@ Gem.prototype.gemTypes = [{ 'color': 'blue',
 Gem.prototype.reset = function() {
   var row = getRandomInt(1, 4);
   var col = getRandomInt(0, 5);
-  var properties = this.gemTypes[getRandomInt(0, this.gemTypes.length)]
+  var properties = this.gemTypes[getRandomInt(0, this.gemTypes.length)];
   for (var propname in properties) {
     if (properties.hasOwnProperty(propname)) {
       this[propname] = properties[propname];
@@ -248,7 +248,7 @@ Gem.prototype.destroySelf = function() {
   game.gem = new Placeholder(function () {
     game.gem = new Gem();
   });
-}
+};
 
 
  /*
@@ -302,7 +302,7 @@ var Toast = function(displayText, opt_x, opt_y, opt_size, opt_duration) {
   } else {
     this.size = this.fontSizes.small;
   }
-}
+};
 
  /*
   * Removes after time limit.
@@ -311,7 +311,7 @@ Toast.prototype.update = function() {
   if (this.destroytime !== 0 && Date.now() >= this.destroytime) {
     game.toasts.splice(game.toasts.indexOf(this), 1);
   }
-}
+};
 
  /*
   * Renders the toast on screen.
@@ -329,7 +329,7 @@ Toast.prototype.render = function() {
   ctx.strokeText(this.displayText, this.x, this.y);
   ctx.fillStyle = "white";
   ctx.fillText(this.displayText, this.x, this.y);
-}
+};
 
  /*
   * Toast font sizes.
@@ -338,7 +338,7 @@ Toast.prototype.fontSizes = {
   "small": "bold 12pt Helvetica, Arial, sans-serif",
   "medium": "bold 24pt Helvetica, Arial, sans-serif",
   "large": "bold 48pt Helvetica, Arial, sans-serif"
-}
+};
 
  /*
   * Scoreboard object displays the score at the top of the screen.
@@ -347,7 +347,7 @@ var Scoreboard = function(gameState) {
   this.gameState = gameState;
   this.score = {};
   this.freeze = false;
-}
+};
 
  /*
   * Updates the values for the scoreboard.
@@ -359,7 +359,7 @@ Scoreboard.prototype.update = function() {
   if (this.score.livesRemaining === 0) {
     this.freeze = true;
   }
-}
+};
 
  /*
   * Renders the scoreboard.
@@ -378,7 +378,7 @@ Scoreboard.prototype.render = function() {
   ctx.strokeText(output, 5, 40);
   ctx.fillStyle = "#9cf";
   ctx.fillText(output, 5, 40);
-}
+};
 
 
  /*
@@ -386,7 +386,7 @@ Scoreboard.prototype.render = function() {
   */
 var GameState = function() {
   this.reset();
-}
+};
 
  /*
   * Sets the game state to the initial state.
@@ -402,7 +402,7 @@ GameState.prototype.reset = function() {
   for (var i = 0; i < this.numEnemies; i++) {
     this.allEnemies.push(new Enemy());
   }
-}
+};
  /*
   * Returns an object contain data for the scoreboard.
   * @return {Object} Scoreboard values object
@@ -413,7 +413,7 @@ GameState.prototype.getScoreboardValues = function() {
     "livesRemaining": this.player.getLives(),
     "score": this.player.getScore()
   };
-}
+};
 
 
 // Instantiate game state.
