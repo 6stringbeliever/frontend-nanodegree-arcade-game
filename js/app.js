@@ -52,7 +52,7 @@ var Enemy = function() {
   this.reset();
 }
 Enemy.prototype = Object.create(GamePiece.prototype);
-Enemy.prototype.constructor = GamePiece;
+Enemy.prototype.constructor = Enemy;
 
  /* Update the enemy's position, required method for game.
   * @param dt {num} a time delta between ticks
@@ -91,7 +91,7 @@ var Player = function() {
   this.resetPos();
 };
 Player.prototype = Object.create(GamePiece.prototype);
-Player.prototype.constructor = GamePiece;
+Player.prototype.constructor = Player;
 
  /*
   * If the player has been moved, update its x and y coordinates
@@ -196,7 +196,7 @@ var Gem = function () {
   this.reset();
 };
 Gem.prototype = Object.create(GamePiece.prototype);
-Gem.prototype.constructor = GamePiece;
+Gem.prototype.constructor = Gem;
 
  /*
   * Gem properties by type. Duration is milliseconds gem appears on screen.
@@ -368,7 +368,6 @@ Scoreboard.prototype.render = function() {
   var output = "Score: " + this.score.score;
   output += "   Lives: " + this.score.livesRemaining;
   output += "   Time: " + this.score.elapsedTime;
-  //console.log(output);
   ctx.globalAlpha = 1.0;
   ctx.font = "bold 18pt Helvetica, Arial, sans-serif";
   ctx.textAlign = "left";
