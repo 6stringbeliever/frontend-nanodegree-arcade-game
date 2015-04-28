@@ -1,6 +1,8 @@
 frontend-nanodegree-arcade-game
 ===============================
 
+[View the project live here.](http://6stringbeliever.github.io/frontend-nanodegree-arcade-game/)
+
 Download all files and open index.html to play.
 
 Use up/down/left/right arrow keys to move the player. Avoid bugs. Collect items.
